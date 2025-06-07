@@ -54,23 +54,29 @@ int main() {
 	char *current_time = NULL;
 	size_t length = 0;
 	t_date *date_start;
+	t_date *date_now;
 	t_time *time_start;
+	t_time *time_now;
+	t_timeData *data;
 
+	// getting data from file and format it
 	getline(&start_time, &length, logs);
 	start_time = strdup(start_time);
 	date_start = init_date(str_split(start_time, "|")[0]);
-
-	printf("%d/%d/%d\n", date_start->day, date_start->month, date_start->year);
+	time_start = init_time(str_split(start_time, "|")[1]);
 
 	getline(&current_time, &length, logs);
 	current_time = strdup(current_time);
-	time_start = init_time(str_split(start_time, "|")[1]);
+	time_now = init_time(str_split(current_time, "|")[1]);
+	date_now = init_date(str_split(current_time, "|")[0]);
+	
+	data = (t_timeData *)malloc(sizeof(t_timeData));
+	data->start_date = date_start;
+	data->start_time = time_start;
+	data->current_date = date_now;
+	data-> current_time = time_now;
 
-	printf("%d:%d\n", time_start->hours,time_start->minutes);
-
-	printf("\nstart_time ===> %s\n", start_time);
-	printf("current_time ===> %s\n", current_time);
-
+	printf("logtime: %d", calculate(data));
 	free(start_time);
 	free(current_time);
 	fclose(logs);
