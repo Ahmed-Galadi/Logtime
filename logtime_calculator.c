@@ -1,5 +1,6 @@
 #include "logtime_calculator.h"
 #include <stdlib.h>
+#include <time.h>
 
 t_date *init_date(char *date_str) {
 	t_date *output = (t_date *)malloc(sizeof(t_date));
@@ -25,6 +26,27 @@ t_time *init_time(char *time_str) {
 }
 
 
+time_t to_timestamp(t_date *date, t_time *time) {
+	struct tm timeinfo = {0};
+
+	timeinfo.tm_year = date->year - 1900;
+	timeinfo.tm_mon  = date->month - 1;
+	timeinfo.tm_mday = date->day;
+	timeinfo.tm_hour = time->hours;
+	timeinfo.tm_min  = time->minutes;
+	timeinfo.tm_sec  = time->seconds;
+
+	return mktime(&timeinfo);
+}
+
+int	calculate(t_timeData *data) {
+	time_t start = to_timestamp(data->start_date, data->start_time);
+	time_t end   = to_timestamp(data->current_date, data->current_time);
+
+	int output = difftime(end, start);
+
+	return (output);
+}
 
 int main() {
 	FILE *logs = fopen("logs", "r");
