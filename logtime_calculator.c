@@ -48,6 +48,15 @@ int	calculate(t_timeData *data) {
 	return (output);
 }
 
+void	print_logtime(int logtime_in_seconds) {
+	int seconds = logtime_in_seconds;
+	int hours = seconds / 3600;
+	int minutes = (seconds % 3600) / 60;
+	int secs = seconds % 60;
+
+	printf("logtime: %d hours, %d minutes, %d seconds\n", hours, minutes, secs);
+}
+
 int main() {
 	FILE *logs = fopen("logs", "r");
 	char *start_time = NULL;
@@ -76,7 +85,8 @@ int main() {
 	data->current_date = date_now;
 	data-> current_time = time_now;
 
-	printf("logtime: %d", calculate(data));
+	print_logtime(calculate(data));
+
 	free(start_time);
 	free(current_time);
 	fclose(logs);
