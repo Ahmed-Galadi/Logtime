@@ -12,7 +12,8 @@ do
 	echo "$current_date|$current_time" >> logs;	
 
 	logtime=$(./calculate);
-	echo "$logtime" >> logs; 
+	timestamp=$(date "+%Y-%m-%d %H:%M:%S");
+	echo "$timestamp|$logtime" >> logs;
 	sleep 5;
 done
 
