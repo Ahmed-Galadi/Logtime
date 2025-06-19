@@ -14,6 +14,7 @@ do
 	logtime=$(./calculate);
 	timestamp=$(date "+%Y-%m-%d %H:%M:%S");
 	echo "$timestamp|$logtime" >> logs;
+	./add_logtime "$timestamp" "$logtime";
 	sleep 5;
 done
 
