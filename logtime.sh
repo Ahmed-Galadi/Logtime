@@ -13,8 +13,9 @@ do
 
 	logtime=$(./calculate);
 	timestamp=$(date "+%Y-%m-%d %H:%M:%S");
+	current_month=$(date "+%Y-%m");
 	echo "$timestamp|$logtime" >> logs;
-	./add_logtime "$timestamp" "$logtime";
+	./addLogtime "$timestamp" "$logtime" "$current_time";
 	sleep 5;
 done
 
