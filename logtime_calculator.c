@@ -55,7 +55,7 @@ void	print_logtime(int logtime_in_seconds) {
 	int secs = seconds % 60;
 	
 	setvbuf(stdout, NULL, _IONBF, 0);
-	printf("%dh %dm %ds\r", hours, minutes, secs);
+	printf("%d:%d:%d\n", hours, minutes, secs);
 	fflush(stdout);
 }
 

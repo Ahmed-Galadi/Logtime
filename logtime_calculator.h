@@ -26,6 +26,13 @@ struct s_timeData {
 	t_time	*current_time;
 } typedef t_timeData;
 
+struct s_format {
+	t_date	*timeStamp_date;
+	t_time	*timeStamp_time;
+	t_time	*logtime;
+	char	*file_name;
+} typedef t_format;
+
 char	**str_split(const char *str, const char *delims);
 
 #endif
