@@ -1,4 +1,3 @@
-
 #include "logtime_calculator.h"
 
 t_date *init_date(char *date_str) {
@@ -40,10 +39,10 @@ t_format *init_data(char **args) {
 
 t_time *read_time_from_file(const char *filename) {
 	FILE *file = fopen(filename, "r");
+	int h = 0, m = 0, s = 0;
+	
 	if (!file)
 		return NULL;
-
-	int h = 0, m = 0, s = 0;
 	fscanf(file, "%dh %dm %ds", &h, &m, &s);
 	fclose(file);
 

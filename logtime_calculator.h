@@ -34,5 +34,8 @@ struct s_format {
 } typedef t_format;
 
 char	**str_split(const char *str, const char *delims);
+t_date *init_date(char *date_str);
+t_time *init_time(char *time_str);
+t_format *init_data(char **args);
 
 #endif
