@@ -37,3 +37,15 @@ t_format *init_data(char **args) {
 	output->file_name = args[2];
 	return (output);	
 }
+
+t_time *add_times(t_time *a, t_time *b) {
+	t_time *res = malloc(sizeof(t_time));
+	int total_seconds = a->seconds + b->seconds;
+	int total_minutes = a->minutes + b->minutes + (total_seconds / 60);
+	int total_hours = a->hours + b->hours + (total_minutes / 60);
+
+	res->seconds = total_seconds % 60;
+	res->minutes = total_minutes % 60;
+	res->hours = total_hours;
+	return (res);
+}

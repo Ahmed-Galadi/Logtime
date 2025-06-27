@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 struct s_date {
 	int year;
@@ -37,5 +38,6 @@ char	**str_split(const char *str, const char *delims);
 t_date *init_date(char *date_str);
 t_time *init_time(char *time_str);
 t_format *init_data(char **args);
+t_time *add_times(t_time *a, t_time *b);
 
 #endif

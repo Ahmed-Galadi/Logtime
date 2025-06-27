@@ -2,9 +2,8 @@
 
 log_start_date=$(who -u | awk '{print $3}')
 log_start_hour=$(who -u | awk '{print $4}')
-current_month=$(date "+%Y-%m-%d");
 
-cat accumulated_logtime > "$current_month";
+cat accumulated_logtime > ".logtime_tracker_1";
 
 
 while true
@@ -17,9 +16,8 @@ do
 
 	logtime=$(./calculate);
 	timestamp=$(date "+%Y-%m-%d %H:%M:%S");
-	current_month_file=$(date "+%Y-%m-%d");
 	echo "$timestamp|$logtime" >> logs;
-	./addLogtime "$timestamp" "$logtime" "$current_month_file";
+	./addLogtime "$timestamp" "$logtime" ".logtime_tracker_1";
 	./createLogs "$timestamp" "$logtime";
 	sleep 5;
 done
