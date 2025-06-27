@@ -16,17 +16,17 @@ t_time *read_time_from_file(const char *filename) {
 	return result;
 }
 
-t_time *add_times(t_time *a, t_time *b) {
-	t_time *res = malloc(sizeof(t_time));
-	int total_seconds = a->seconds + b->seconds;
-	int total_minutes = a->minutes + b->minutes + (total_seconds / 60);
-	int total_hours = a->hours + b->hours + (total_minutes / 60);
-
-	res->seconds = total_seconds % 60;
-	res->minutes = total_minutes % 60;
-	res->hours = total_hours;
-	return res;
-}
+/*t_time *add_times(t_time *a, t_time *b) {*/
+/*	t_time *res = malloc(sizeof(t_time));*/
+/*	int total_seconds = a->seconds + b->seconds;*/
+/*	int total_minutes = a->minutes + b->minutes + (total_seconds / 60);*/
+/*	int total_hours = a->hours + b->hours + (total_minutes / 60);*/
+/**/
+/*	res->seconds = total_seconds % 60;*/
+/*	res->minutes = total_minutes % 60;*/
+/*	res->hours = total_hours;*/
+/*	return res;*/
+/*}*/
 
 void write_time_to_file(const char *filename, t_time *time) {
 	FILE *file = fopen(filename, "w");

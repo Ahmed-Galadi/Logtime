@@ -3,8 +3,9 @@
 log_start_date=$(who -u | awk '{print $3}')
 log_start_hour=$(who -u | awk '{print $4}')
 
-cat accumulated_logtime > ".logtime_tracker_1";
 
+cat accumulated_logtime > ".logtime_tracker_1";
+cat sameDay > ".logtime_tracker_2";
 
 while true
 do
