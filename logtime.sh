@@ -20,6 +20,7 @@ do
 	echo "$timestamp|$logtime" >> logs;
 	./addLogtime "$timestamp" "$logtime" ".logtime_tracker_1";
 	./createLogs "$timestamp" "$logtime";
+
 	sleep 5;
 done
 
