@@ -143,10 +143,11 @@ void wave_loader(int cycles) {
     printf("\r" GREEN "✓ Analysis complete!    \n" RESET);
 }
 
+
+
 // print print data
 void	print_data() {
-	progress_bar(19, 100, 29);
-	printf("hello world!\n");
+	
 }
 
 // Main demo function

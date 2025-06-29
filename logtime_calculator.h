@@ -34,6 +34,16 @@ struct s_format {
 	char	*file_name;
 } typedef t_format;
 
+struct s_print_data {
+	t_date *today;
+	t_time *today_logtime;
+	t_time *month_logtime;
+	int		days_passed;
+	int		day_progress;
+	int		month_progress;
+	t_time	*required_hours;
+} typedef t_print_data;
+
 char	**str_split(const char *str, const char *delims);
 t_date *init_date(char *date_str);
 t_time *init_time(char *time_str);
