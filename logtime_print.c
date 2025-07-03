@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
 
 // ANSI color codes
 #define RESET   "\033[0m"
@@ -15,7 +16,6 @@
 #define BOLD    "\033[1m"
 
 #define MONTHLY_GOAL 120
-
 // Clear screen and move cursor to top
 void clear_screen() {
     printf("\033[2J\033[H");
@@ -158,16 +158,53 @@ t_time *parse_today_logtime() {
 	return (output);
 }
 
-t_date *get_todays_date() {
-
+/* ── difference in whole days between two tm structs ───────────── */
+static int date_diff_days(struct tm a, struct tm b)
+{
+    time_t ta = mktime(&a);
+    time_t tb = mktime(&b);
+    return (int) ((tb - ta) / 86400);          /* 86400 s = 1 day   */
 }
 
-t_time *daily_logtime_goal(t_time *acc_logtime) {
-	t_time *output = malloc(sizeof(t_time));
-	
-	if (acc_logtime->hours < MONTHLY_GOAL) {
-		output->hours = 
-	}
+/* ── compute how many whole days are left in the current log‑month ── */
+static int days_left_in_log_month(struct tm today)
+{
+    struct tm end = today;
+
+    if (today.tm_mday >= 28) {                 /* period crosses month */
+        end.tm_mon += 1;                       /* ⬆ next month        */
+    }
+    end.tm_mday = 27;                          /* fixed end‑day       */
+
+    return (date_diff_days(today, end) + 1);     /* +1 ⇒ count today   */
+}
+
+/* ── core: hours you must log each remaining day ─────────────────── */
+int daily_hours_goal(int accumulated_hours)
+{
+    time_t now = time(NULL);
+    struct tm today = *localtime(&now);
+
+    int remaining  = MONTHLY_GOAL - accumulated_hours;
+    if (remaining <= 0)
+        return 0;                              /* already hit target  */
+
+    int days_left  = days_left_in_log_month(today);
+    return (remaining + days_left - 1) / days_left;  /* ceil div      */
+}
+
+int		progress_persentage(int logtime, int goal) {
+	int output = 0;
+	if (logtime >= goal)
+		return (100);
+	else
+		output = (logtime / goal) * 100;
+	return (output);
+}
+
+char *format_toprint(t_time *time) {
+	char *output;
+
 	return (output);
 }
 
@@ -175,21 +212,26 @@ t_time *daily_logtime_goal(t_time *acc_logtime) {
 void	print_data() {
 	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
 	t_time *accumulated_for_today = parse_today_logtime();
-	t_time *daily_goal = daily_logtime_goal(accumulated_logtime);
-	int		daily_progress;
-	int		monthly_progress;
-	int		daily_percent;
-	int		monthly_percent;
+	int		daily_goal = daily_hours_goal(accumulated_logtime->hours);
+	int		daily_percent = progress_persentage(accumulated_for_today->hours, daily_goal); 
+	int		monthly_percen = progress_persentage(accumulated_logtime->hours, MONTHLY_GOAL);
+
+	printf("╭─────────────────────────────────────────────────────────────────────────────╮\n\
+│                        ⏱  TIME TRACKER STATS ⏱                              │\n\
+╰─────────────────────────────────────────────────────────────────────────────╯\n\
+\n\
+  ╭─────────────────────╮   ╭─────────────────────╮   ╭─────────────────────╮\n\
+  │                     │   │                     │   │                     │\n\
+  │       TODAY         │   │       MONTH         │   │      AVERAGE        │\n\
+  │                     │   │                     │   │                     │\n\
+  │      ┌─────┐        │   │      ┌─────┐        │   │      ┌─────┐        │\n");
+	printf("  │      │ 8.5 │        │   │      │ 164 │        │   │      │ 7.3 │        │\n");
 }
 
 // Main demo function
 int main() {
     clear_screen();
     
-    /*printf(BOLD WHITE "╔══════════════════════════════════════╗\n");*/
-    /*printf("║          ⏲  LOGTIME FARMER ⏲         ║\n");*/
-    /*printf("╚══════════════════════════════════════╝\n\n" RESET);*/
-
     matrix_loader(10);
     clear_screen();
 	print_data();
