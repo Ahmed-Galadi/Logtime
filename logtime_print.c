@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 
 // ANSI color codes
 #define RESET   "\033[0m"
@@ -14,6 +13,8 @@
 #define CYAN    "\033[36m"
 #define WHITE   "\033[37m"
 #define BOLD    "\033[1m"
+
+#define MONTHLY_GOAL 120
 
 // Clear screen and move cursor to top
 void clear_screen() {
@@ -143,20 +144,51 @@ void wave_loader(int cycles) {
     printf("\r" GREEN "✓ Analysis complete!    \n" RESET);
 }
 
+t_time *parse_today_logtime() {
+	FILE *today = fopen("sameDay", "r");
+	char *data_string = NULL;
+	char **splited_data = NULL;
+	t_time *output = NULL;
+	size_t length;
 
+	getline(&data_string, &length, today);
+	data_string = strdup(data_string);
+	splited_data = str_split(data_string, " ");
+	output = init_time(splited_data[1]);
+	return (output);
+}
+
+t_date *get_todays_date() {
+
+}
+
+t_time *daily_logtime_goal(t_time *acc_logtime) {
+	t_time *output = malloc(sizeof(t_time));
+	
+	if (acc_logtime->hours < MONTHLY_GOAL) {
+		output->hours = 
+	}
+	return (output);
+}
 
 // print print data
 void	print_data() {
-	
+	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
+	t_time *accumulated_for_today = parse_today_logtime();
+	t_time *daily_goal = daily_logtime_goal(accumulated_logtime);
+	int		daily_progress;
+	int		monthly_progress;
+	int		daily_percent;
+	int		monthly_percent;
 }
 
 // Main demo function
 int main() {
     clear_screen();
     
-    printf(BOLD WHITE "╔══════════════════════════════════════╗\n");
-    printf("║          ⏲  LOGTIME FARMER ⏲         ║\n");
-    printf("╚══════════════════════════════════════╝\n\n" RESET);
+    /*printf(BOLD WHITE "╔══════════════════════════════════════╗\n");*/
+    /*printf("║          ⏲  LOGTIME FARMER ⏲         ║\n");*/
+    /*printf("╚══════════════════════════════════════╝\n\n" RESET);*/
 
     matrix_loader(10);
     clear_screen();
