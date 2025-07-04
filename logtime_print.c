@@ -220,12 +220,16 @@ char *format_toprint(t_time *time)
 }
 
 char *today_status(t_time *todays_time) {
-	if (todays_time->hours < 4)
+	if (todays_time->hours <= 4)
 		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
-	if (todays_time->hours > 10)
+	if (todays_time->hours > 4 && todays_time->hours < 8)
+		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
+	if (todays_time->hours >= 8 && todays_time->hours < 15)
 		return (strdup("  │     HARD WORKER     │ \n  │        ᕙ(⇀‸↼‶)ᕗ     │"));
-	if (todays_time->hours >= 15)
-		return (strdup("  │    SLEEP DESERVED   │ \n  │         (ᴗ˳ᴗ)ᶻ𝗓𐰁       │"));
+	if (todays_time->hours >= 15 && todays_time->hours < 20)
+		return (strdup("  │    SLEEP DESERVED   │ \n  │        (ᴗ˳ᴗ)ᶻ𝗓𐰁     │"));
+	else
+		return (strdup("  │     BRAIN DAMAGE    │ \n  │         ☉ ‿ ⚆       │"));;
 	return (NULL);
 }
 
