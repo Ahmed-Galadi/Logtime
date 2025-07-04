@@ -50,5 +50,6 @@ t_time *init_time(char *time_str);
 t_format *init_data(char **args);
 t_time *add_times(t_time *a, t_time *b);
 t_time *read_time_from_file(const char *filename);
+char	*ft_itoa(int n);
 
 #endif

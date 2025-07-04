@@ -202,10 +202,31 @@ int		progress_persentage(int logtime, int goal) {
 	return (output);
 }
 
-char *format_toprint(t_time *time) {
-	char *output;
+char *format_toprint(t_time *time)
+{
+    char *output = malloc(20);               /* "120h 59m 59s\0" fits in 14 */
+    if (!output)                             /* always check malloc */
+        return NULL;
+	if (!time->minutes && !time->seconds) {
+		if (time->hours > 9)
+			sprintf(output, "%d hours/day", time->hours);
+		else
+			sprintf(output, " %d hours/day", time->hours);
+	}
+	else
+	    sprintf(output, "%02dh %02dm %02ds",     /* zero‑pad each field */
+		        time->hours, time->minutes, time->seconds);
+    return (output);
+}
 
-	return (output);
+char *today_status(t_time *todays_time) {
+	if (todays_time->hours < 4)
+		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
+	if (todays_time->hours > 10)
+		return (strdup("  │     HARD WORKER     │ \n  │        ᕙ(⇀‸↼‶)ᕗ     │"));
+	if (todays_time->hours >= 15)
+		return (strdup("  │    SLEEP DESERVED   │ \n  │         (ᴗ˳ᴗ)ᶻ𝗓𐰁       │"));
+	return (NULL);
 }
 
 // print print data
@@ -222,18 +243,21 @@ void	print_data() {
 \n\
   ╭─────────────────────╮   ╭─────────────────────╮   ╭─────────────────────╮\n\
   │                     │   │                     │   │                     │\n\
-  │       TODAY         │   │       MONTH         │   │      AVERAGE        │\n\
+  │       TODAY         │   │       MONTH         │   │	  HOURSE PER DAY    │\n\
   │                     │   │                     │   │                     │\n\
-  │      ┌─────┐        │   │      ┌─────┐        │   │      ┌─────┐        │\n");
-	printf("  │      │ 8.5 │        │   │      │ 164 │        │   │      │ 7.3 │        │\n");
+  │ ┌─────────────────┐ │   │ ┌─────────────────┐ │   │ ┌─────────────────┐ │\n");
+	t_time th = {daily_goal, 0, 0};
+	printf("  │ │   %s   │ │   │ │   %s   │ │   │ │  %s   │ │\n",
+		format_toprint(accumulated_for_today), format_toprint(accumulated_logtime), format_toprint(&th));
+	printf("  │ └─────────────────┘ │   │ └─────────────────┘ │   │ └─────────────────┘ │\n");
+	printf("%s", today_status(accumulated_for_today));
 }
 
 // Main demo function
 int main() {
     clear_screen();
-    
     matrix_loader(10);
     clear_screen();
 	print_data();
-    return 0;
+    return (1);
 }
