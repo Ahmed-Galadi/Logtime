@@ -219,11 +219,35 @@ char *format_toprint(t_time *time)
     return (output);
 }
 
-char *today_status(t_time *todays_time) {
-	if (todays_time->hours <= 4)
-		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
-	if (todays_time->hours > 4 && todays_time->hours < 8)
-		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
+char *month_status(t_time *accumulated_logtime, int daily_goal) {
+	char *output = malloc(1024);
+	char *status = malloc(255);
+    time_t now = time(NULL);
+    struct tm today = *localtime(&now);
+
+	sprintf(output, "  │    DAYS LEFT: %02d    │  ", days_left_in_log_month(today));
+	return (output);
+}
+
+char *hpd_status() {
+
+}
+
+char *today_status(t_time *todays_time, int daily_goal) {
+	char *output = malloc(1024);
+	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
+	char *month;
+	char *hours_per_day;
+    time_t now = time(NULL);
+    struct tm today = *localtime(&now);
+
+	if (todays_time->hours < 4) {
+
+		sprintf(output, "  │   WE JUST STARTED   │  │    DAYS LEFT: %02d    │  %02d", days_left_in_log_month(today));
+	}
+ 		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
+	if (todays_time->hours >= 4 && todays_time->hours < 8)
+		return (strdup("  │   WE JUST STARTED   │ \n  │       (ദി˙ᗜ ˙)      │"));
 	if (todays_time->hours >= 8 && todays_time->hours < 15)
 		return (strdup("  │     HARD WORKER     │ \n  │        ᕙ(⇀‸↼‶)ᕗ     │"));
 	if (todays_time->hours >= 15 && todays_time->hours < 20)
@@ -232,6 +256,8 @@ char *today_status(t_time *todays_time) {
 		return (strdup("  │     BRAIN DAMAGE    │ \n  │         ☉ ‿ ⚆       │"));;
 	return (NULL);
 }
+
+
 
 // print print data
 void	print_data() {
@@ -254,7 +280,7 @@ void	print_data() {
 	printf("  │ │   %s   │ │   │ │   %s   │ │   │ │  %s   │ │\n",
 		format_toprint(accumulated_for_today), format_toprint(accumulated_logtime), format_toprint(&th));
 	printf("  │ └─────────────────┘ │   │ └─────────────────┘ │   │ └─────────────────┘ │\n");
-	printf("%s", today_status(accumulated_for_today));
+	printf("%s", today_status(accumulated_for_today, daily_goal));
 }
 
 // Main demo function

@@ -110,3 +110,29 @@ char	*ft_itoa(int n)
 	}
 	return (nbr_str);
 }
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	i;
+	size_t	j;
+	char	*strjoin;
+	size_t	leng_s1;
+	size_t	leng_s2;
+
+	if (!s1 && !s2)
+		return (NULL);
+	leng_s1 = strlen(s1);
+	leng_s2 = strlen(s2);
+	strjoin = (char *)malloc(leng_s1 + leng_s2 + 1);
+	if (!strjoin)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (i < leng_s1)
+		strjoin[j++] = s1[i++];
+	i = 0;
+	while (i < leng_s2)
+		strjoin[j++] = s2[i++];
+	strjoin[j] = '\0';
+	return (strjoin);
+}
