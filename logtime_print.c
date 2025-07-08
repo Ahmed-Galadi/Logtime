@@ -219,18 +219,27 @@ char *format_toprint(t_time *time)
     return (output);
 }
 
-char *month_status(t_time *accumulated_logtime, int daily_goal) {
-	char *output = malloc(1024);
-	char *status = malloc(255);
-    time_t now = time(NULL);
-    struct tm today = *localtime(&now);
-
-	sprintf(output, "  │    DAYS LEFT: %02d    │  ", days_left_in_log_month(today));
+char *hpd_status_msg(int hpd) {
+	char *output = malloc(255);
+	
+	if (hpd <= 4)
+		sprintf(output, " U ARE SAFE ദി(•ᴗ-)✧ ");
+	else if (hpd > 4 && hpd <= 8)
+		sprintf(output, "  U ARE OKAY ( •᷄ᴗ•́)  ");
+	else if (hpd > 8 && hpd <= 15)
+		sprintf(output, "   U LATE (·•᷄‎ࡇ•᷅ )   ");
+	else if (hpd > 15 && hpd <= 20)
+		sprintf(output, " IN DANGER ( ˶°ㅁ°)!! ");
+	else
+		sprintf(output, " GIVE UP ｡°(°¯᷄◠¯᷅°)°｡ ");
 	return (output);
 }
 
-char *hpd_status() {
-
+char *month_status_emoji(int hpd) {
+	char *output = malloc(255);
+	
+	if (hpd <= 4)
+		sprintf(output, "GOOD JOB");
 }
 
 char *today_status(t_time *todays_time, int daily_goal) {
@@ -243,18 +252,19 @@ char *today_status(t_time *todays_time, int daily_goal) {
 
 	if (todays_time->hours < 4) {
 
-		sprintf(output, "  │   WE JUST STARTED   │  │    DAYS LEFT: %02d    │  %02d", days_left_in_log_month(today));
+		sprintf(output, "  │   WE JUST STARTED   │   │    DAYS LEFT: %02d    │   │%s│\n  \
+│       ᕕ( ᐛ )ᕗ       │", days_left_in_log_month(today), hpd_status_msg(daily_goal));
 	}
- 		return (strdup("  │   WE JUST STARTED   │ \n  │        ᕕ( ᐛ )ᕗ      │"));
-	if (todays_time->hours >= 4 && todays_time->hours < 8)
-		return (strdup("  │   WE JUST STARTED   │ \n  │       (ദി˙ᗜ ˙)      │"));
-	if (todays_time->hours >= 8 && todays_time->hours < 15)
-		return (strdup("  │     HARD WORKER     │ \n  │        ᕙ(⇀‸↼‶)ᕗ     │"));
-	if (todays_time->hours >= 15 && todays_time->hours < 20)
-		return (strdup("  │    SLEEP DESERVED   │ \n  │        (ᴗ˳ᴗ)ᶻ𝗓𐰁     │"));
-	else
-		return (strdup("  │     BRAIN DAMAGE    │ \n  │         ☉ ‿ ⚆       │"));;
-	return (NULL);
+	/*if (todays_time->hours >= 4 && todays_time->hours < 8)*/
+		 
+		/*sprintf(output, "  │   WE JUST STARTED   │ \n  │       (ദി˙ᗜ ˙)      │"));*/
+	/*if (todays_time->hours >= 8 && todays_time->hours < 15)*/
+	/*	return (strdup("  │     HARD WORKER     │ \n  │        ᕙ(⇀‸↼‶)ᕗ     │"));*/
+	/*if (todays_time->hours >= 15 && todays_time->hours < 20)*/
+	/*	return (strdup("  │    SLEEP DESERVED   │ \n  │        (ᴗ˳ᴗ)ᶻ𝗓𐰁     │"));*/
+	/*else*/
+	/*	return (strdup("  │     BRAIN DAMAGE    │ \n  │         ☉ ‿ ⚆       │"));;*/
+	return (output);
 }
 
 
