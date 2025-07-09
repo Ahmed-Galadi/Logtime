@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/agaladi/Desktop/Projects/logtime_farmer/logtime.sh
+Path=/home/agaladi/Desktop/Projects/logtime_farmer
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Logtime Tracker
+Comment=Start logtime tracker at login

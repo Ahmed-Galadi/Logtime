@@ -21,7 +21,7 @@
 #define BABYBLUE "\033[38;2;137;207;240m"
 #define BLRED "\033[38;5;203m"
 
-#define MONTHLY_GOAL 120
+#define MONTHLY_GOAL 80
 // Clear screen and move cursor to top
 void clear_screen() {
     printf("\033[2J\033[H");
