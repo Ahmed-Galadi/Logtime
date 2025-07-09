@@ -14,6 +14,12 @@
 #define CYAN    "\033[36m"
 #define WHITE   "\033[37m"
 #define BOLD    "\033[1m"
+#define ORANGE  "\033[38;2;255;165;0m"
+#define LAVENDER "\033[38;5;141m"
+#define HOTPINK "\033[38;2;255;105;180m"
+#define GREENYELLOW "\033[38;5;190m"
+#define BABYBLUE "\033[38;2;137;207;240m"
+#define BLRED "\033[38;5;203m"
 
 #define MONTHLY_GOAL 120
 // Clear screen and move cursor to top
@@ -193,13 +199,13 @@ int daily_hours_goal(int accumulated_hours)
     return (remaining + days_left - 1) / days_left;  /* ceil div      */
 }
 
-int		progress_persentage(int logtime, int goal) {
+int progress_persentage(int logtime, int goal) {
 	int output = 0;
 	if (logtime >= goal)
-		return (100);
+		return 100;
 	else
-		output = (logtime / goal) * 100;
-	return (output);
+		output = (int)(((float)logtime / (float)goal) * 100);
+	return output;
 }
 
 char *format_toprint(t_time *time)
@@ -223,51 +229,81 @@ char *hpd_status_msg(int hpd) {
 	char *output = malloc(255);
 	
 	if (hpd <= 4)
-		sprintf(output, " U ARE SAFE ദി(•ᴗ-)✧ ");
+		sprintf(output, GREEN BOLD"      U ARE SAFE     "RESET);
 	else if (hpd > 4 && hpd <= 8)
-		sprintf(output, "  U ARE OKAY ( •᷄ᴗ•́)  ");
+		sprintf(output, GREENYELLOW BOLD"      U ARE OKAY     "RESET);
 	else if (hpd > 8 && hpd <= 15)
-		sprintf(output, "   U LATE (·•᷄‎ࡇ•᷅ )   ");
+		sprintf(output, ORANGE BOLD"        U LATE       "RESET);
 	else if (hpd > 15 && hpd <= 20)
-		sprintf(output, " IN DANGER ( ˶°ㅁ°)!! ");
+		sprintf(output, HOTPINK BOLD"      IN DANGER!     "RESET);
 	else
-		sprintf(output, " GIVE UP ｡°(°¯᷄◠¯᷅°)°｡ ");
+		sprintf(output, LAVENDER BOLD"       GIVE UP       "RESET);
 	return (output);
 }
 
-char *month_status_emoji(int hpd) {
+char *hpd_status_emoji(int hpd) {
 	char *output = malloc(255);
 	
 	if (hpd <= 4)
-		sprintf(output, "GOOD JOB");
+		sprintf(output,GREEN "     ദി(• ᴗ - )✧     "RESET);
+	else if (hpd > 4 && hpd <= 8)
+		sprintf(output, GREENYELLOW"        ( •᷄ᴗ•́)       "RESET);
+	else if (hpd > 8 && hpd <= 15)
+		sprintf(output, ORANGE"       (·•᷄‎ࡇ•᷅ )      "RESET);
+	else if (hpd > 15 && hpd <= 20)
+		sprintf(output, HOTPINK"      ( ˶°ㅁ°)!!     "RESET);
+	else
+		sprintf(output, LAVENDER"     ｡°(°¯᷄◠¯᷅°)°｡     "RESET);
+	return (output);
 }
 
-char *today_status(t_time *todays_time, int daily_goal) {
+char *month_status_emoji(int month_progress) {
+	char *output = malloc(255);
+	
+	if (month_progress <= 25)
+		sprintf(output, HOTPINK BOLD"     LOW "RESET BLRED"(·•᷄_•᷅ )     "RESET);
+	else if (month_progress > 25 && month_progress <= 50)
+		sprintf(output, CYAN BOLD"    MEDIUM"RESET GREENYELLOW" (•̀ᴗ•́ )و   "RESET);
+	else if (month_progress > 50 && month_progress <= 75)
+		sprintf(output, BABYBLUE BOLD"  ALMOST "RESET GREEN"ᕙ( •̀ ᗜ •́ )ᕗ "RESET);
+	else if (month_progress > 75 && month_progress <= 99)
+		sprintf(output,LAVENDER BOLD" SO CLOSE "RED" ৻(•̀ ᗜ •́ ৻) "RESET);
+	else if (month_progress >= 100)
+		sprintf(output,YELLOW BOLD" CONGRATS!"RESET ORANGE"ヾ(˃ᴗ˂)◞"RESET LAVENDER"•"RESET BABYBLUE"*"HOTPINK"✰"RESET);
+	return (output);
+}
+
+char *today_status(t_time *todays_time, int daily_goal, int month_progress) {
 	char *output = malloc(1024);
 	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
-	char *month;
-	char *hours_per_day;
     time_t now = time(NULL);
     struct tm today = *localtime(&now);
 
 	if (todays_time->hours < 4) {
 
-		sprintf(output, "  │   WE JUST STARTED   │   │    DAYS LEFT: %02d    │   │%s│\n  \
-│       ᕕ( ᐛ )ᕗ       │", days_left_in_log_month(today), hpd_status_msg(daily_goal));
+		sprintf(output, "  "YELLOW"│"RESET CYAN"   WE JUST STARTED"RESET YELLOW"   │   │   "RESET MAGENTA" DAYS LEFT:"RESET RED BOLD" %02d"RESET YELLOW"    │   │"RESET"%s"YELLOW"│\n  \
+"YELLOW"│       "RESET LAVENDER "ᕕ( ᐛ )ᕗ"RESET YELLOW"       │   │"RESET"%s"YELLOW"│   │"RESET"%s"YELLOW"│\n"RESET, days_left_in_log_month(today), hpd_status_msg(daily_goal), month_status_emoji(month_progress), hpd_status_emoji(daily_goal));
 	}
-	/*if (todays_time->hours >= 4 && todays_time->hours < 8)*/
-		 
-		/*sprintf(output, "  │   WE JUST STARTED   │ \n  │       (ദി˙ᗜ ˙)      │"));*/
-	/*if (todays_time->hours >= 8 && todays_time->hours < 15)*/
-	/*	return (strdup("  │     HARD WORKER     │ \n  │        ᕙ(⇀‸↼‶)ᕗ     │"));*/
-	/*if (todays_time->hours >= 15 && todays_time->hours < 20)*/
-	/*	return (strdup("  │    SLEEP DESERVED   │ \n  │        (ᴗ˳ᴗ)ᶻ𝗓𐰁     │"));*/
-	/*else*/
-	/*	return (strdup("  │     BRAIN DAMAGE    │ \n  │         ☉ ‿ ⚆       │"));;*/
+	else if (todays_time->hours >= 4 && todays_time->hours < 8) {
+		sprintf(output, YELLOW"  │      "RESET ORANGE"GOOD WORK"RESET YELLOW"      │   │   "RESET MAGENTA" DAYS LEFT:"RESET RED BOLD" %02d"RESET YELLOW"    │   │"RESET"%s"YELLOW"│\n  \
+│       "RESET HOTPINK"(ദി˙ᗜ ˙)"RESET YELLOW"      │   │"RESET"%s"YELLOW"│   │"RESET"%s"YELLOW"│\n"RESET, days_left_in_log_month(today), hpd_status_msg(daily_goal), month_status_emoji(month_progress), hpd_status_emoji(daily_goal));
+	}
+	else if (todays_time->hours >= 8 && todays_time->hours < 15) {
+		sprintf(output, YELLOW"  │     "RESET GREENYELLOW"HARD WORKER"RESET YELLOW"     │   │    "RESET MAGENTA"DAYS LEFT:"RESET RED BOLD" %02d"RESET YELLOW"    │   │"RESET"%s"YELLOW"│\n  \
+│        "RESET GREEN"ᕙ(⇀‸↼‶)ᕗ "RESET YELLOW"    │   │"RESET"%s"YELLOW"│   │"RESET"%s"YELLOW"│\n"RESET, days_left_in_log_month(today), hpd_status_msg(daily_goal), month_status_emoji(month_progress), hpd_status_emoji(daily_goal));
+	}
+	else if (todays_time->hours >= 15 && todays_time->hours < 20)
+		sprintf(output, YELLOW"  │    "RESET ORANGE"SLEEP DESERVED"RESET YELLOW"   │   │    "RESET MAGENTA"DAYS LEFT:"RESET RED BOLD" %02d"RESET YELLOW"    │   │"RESET"%s"YELLOW"│\n  \
+│        "RESET BABYBLUE"(ᴗ˳ᴗ)ᶻ𝗓𐰁 "RESET YELLOW"    │   │"RESET"%s"YELLOW"│   │"RESET"%s"YELLOW"│\n"RESET, days_left_in_log_month(today), hpd_status_msg(daily_goal), month_status_emoji(month_progress), hpd_status_emoji(daily_goal));
+	else
+		sprintf(output, YELLOW"  │     "RESET BLRED"BRAIN DAMAGE"RESET YELLOW"    │   │    "RESET MAGENTA"DAYS LEFT:"RESET RED BOLD" %02d "RESET YELLOW"   │   │"RESET"%s"YELLOW"│\n  \
+│         "RESET BLRED"☉ ‿ ⚆ "RESET YELLOW"      │   │"RESET"%s"YELLOW"│   │"RESET"%s"YELLOW"│\n"RESET, days_left_in_log_month(today), hpd_status_msg(daily_goal), month_status_emoji(month_progress), hpd_status_emoji(daily_goal));
 	return (output);
 }
 
-
+/*void progress_bar(int day_progress, int month progress) {*/
+/**/
+/*}*/
 
 // print print data
 void	print_data() {
@@ -277,20 +313,24 @@ void	print_data() {
 	int		daily_percent = progress_persentage(accumulated_for_today->hours, daily_goal); 
 	int		monthly_percen = progress_persentage(accumulated_logtime->hours, MONTHLY_GOAL);
 
-	printf("╭─────────────────────────────────────────────────────────────────────────────╮\n\
-│                        ⏱  TIME TRACKER STATS ⏱                              │\n\
-╰─────────────────────────────────────────────────────────────────────────────╯\n\
+
+	printf(YELLOW "╭─────────────────────────────────────────────────────────────────────────────╮\n\
+│                        "RESET ORANGE BOLD"⏱  TIME TRACKER STATS ⏱ "RESET YELLOW"                             │\n\
+╰─────────────────────────────────────────────────────────────────────────────╯"RESET"\n\
 \n\
-  ╭─────────────────────╮   ╭─────────────────────╮   ╭─────────────────────╮\n\
+  "YELLOW"╭─────────────────────╮   ╭─────────────────────╮   ╭─────────────────────╮\n\
   │                     │   │                     │   │                     │\n\
-  │       TODAY         │   │       MONTH         │   │	  HOURSE PER DAY    │\n\
+  │       "RESET CYAN BOLD"TODAY"RESET YELLOW"         │   │       "RESET GREEN BOLD"MONTH"RESET YELLOW"         │   │	  "YELLOW BOLD"HOURSE PER DAY"RESET YELLOW"    │\n\
   │                     │   │                     │   │                     │\n\
-  │ ┌─────────────────┐ │   │ ┌─────────────────┐ │   │ ┌─────────────────┐ │\n");
+  │ "RESET CYAN"┌─────────────────┐"RESET YELLOW" │   │ "RESET GREEN"┌─────────────────┐"RESET YELLOW" │   │ "RESET ORANGE"┌─────────────────┐"RESET YELLOW" │\n");
 	t_time th = {daily_goal, 0, 0};
-	printf("  │ │   %s   │ │   │ │   %s   │ │   │ │  %s   │ │\n",
+	printf("  │ "RESET CYAN"│   "BOLD"%s"RESET CYAN"   │"RESET YELLOW" │   │ "RESET GREEN"│"BOLD"   %s   │"RESET YELLOW" │   │ "RESET ORANGE"│"BOLD"  %s   │"RESET YELLOW" │\n",
 		format_toprint(accumulated_for_today), format_toprint(accumulated_logtime), format_toprint(&th));
-	printf("  │ └─────────────────┘ │   │ └─────────────────┘ │   │ └─────────────────┘ │\n");
-	printf("%s", today_status(accumulated_for_today, daily_goal));
+	printf("  │ "RESET CYAN"└─────────────────┘"RESET YELLOW" │   │ "RESET GREEN"└─────────────────┘"RESET YELLOW" │   │ "RESET ORANGE"└─────────────────┘"RESET YELLOW" │\n");
+	printf("  │                     │   │                     │   │                     │"RESET"\n");
+	printf("%s", today_status(accumulated_for_today, daily_goal, monthly_percen));
+	printf(YELLOW"  │                     │   │                     │   │                     │\n");
+	printf("  ╰─────────────────────╯   ╰─────────────────────╯   ╰─────────────────────╯"RESET);
 }
 
 // Main demo function
