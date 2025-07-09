@@ -94,7 +94,7 @@ void matrix_loader(int duration) {
 
 
 t_time *parse_today_logtime() {
-	FILE *today = fopen("sameDay", "r");
+	FILE *today = fopen("/home/agaladi/Desktop/Projects/logtime_farmer/sameDay", "r");
 	char *data_string = NULL;
 	char **splited_data = NULL;
 	t_time *output = NULL;
@@ -218,7 +218,7 @@ char *month_status_emoji(int month_progress) {
 
 char *today_status(t_time *todays_time, int daily_goal, int month_progress) {
 	char *output = malloc(1024);
-	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
+	t_time *accumulated_logtime = read_time_from_file("/home/agaladi/Desktop/Projects/logtime_farmer/accumulated_logtime");
     time_t now = time(NULL);
     struct tm today = *localtime(&now);
 
@@ -246,7 +246,7 @@ char *today_status(t_time *todays_time, int daily_goal, int month_progress) {
 
 // print print data
 void	print_data() {
-	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
+	t_time *accumulated_logtime = read_time_from_file("/home/agaladi/Desktop/Projects/logtime_farmer/accumulated_logtime");
 	t_time *accumulated_for_today = parse_today_logtime();
 	int		daily_goal = daily_hours_goal(accumulated_logtime->hours);
 	int		daily_percent = progress_persentage(accumulated_for_today->hours, daily_goal); 
