@@ -32,7 +32,7 @@ void move_cursor(int row, int col) {
     printf("\033[%d;%dH", row, col);
 }
 
-void progress_bar(int width, int duration_ms, int percentage)
+void progress_bar(char *title, int width, int duration_ms, int percentage)
 {
     if (percentage < 0)   percentage = 0;
     if (percentage > 100) percentage = 100;
@@ -40,16 +40,16 @@ void progress_bar(int width, int duration_ms, int percentage)
     int target = (percentage * width) / 100;
 
     for (int i = 0; i <= target; ++i) {
-        printf("\r" BOLD YELLOW "Progress: [");
+        printf("\r" BOLD HOTPINK "  %s: "CYAN"[", title);
 
-        for (int j = 0; j < i;   ++j) printf(GREEN "█");
+        for (int j = 0; j < i;   ++j) printf(BABYBLUE "█");
         for (int j = i; j < width; ++j) printf(WHITE "░");
 
-        printf(YELLOW "] %d%%" RESET, (i * 100) / width);
+        printf(CYAN "] %d%%" RESET, (i * 100) / width);
         fflush(stdout);
         usleep(duration_ms * 1000);
     }
-    puts("");   /* newline after bar is complete */
+    puts("\n");   /* newline after bar is complete */
 }
 
 // Matrix-style falling characters
@@ -92,63 +92,6 @@ void matrix_loader(int duration) {
     }
 }
 
-
-// Pulse effect
-void pulse_loader(int cycles) {
-    char pulse_states[][20] = {
-        "◐", "◓", "◑", "◒"
-    };
-    int i, j;
-    
-    for (i = 0; i < cycles; i++) {
-        for (j = 0; j < 4; j++) {
-            printf("\r" BOLD BLUE "Processing %s" RESET, pulse_states[j]);
-            fflush(stdout);
-            usleep(250000);
-        }
-    }
-    printf("\r" GREEN "✓ Processing complete!\n" RESET);
-}
-
-// Wave animation
-void wave_loader(int cycles) {
-    char wave[][50] = {
-        "▁▁▁▁▁▁▁▁▁▁",
-        "▂▁▁▁▁▁▁▁▁▁",
-        "▃▂▁▁▁▁▁▁▁▁",
-        "▄▃▂▁▁▁▁▁▁▁",
-        "▅▄▃▂▁▁▁▁▁▁",
-        "▆▅▄▃▂▁▁▁▁▁",
-        "▇▆▅▄▃▂▁▁▁▁",
-        "█▇▆▅▄▃▂▁▁▁",
-        "▇█▇▆▅▄▃▂▁▁",
-        "▆▇█▇▆▅▄▃▂▁",
-        "▅▆▇█▇▆▅▄▃▂",
-        "▄▅▆▇█▇▆▅▄▃",
-        "▃▄▅▆▇█▇▆▅▄",
-        "▂▃▄▅▆▇█▇▆▅",
-        "▁▂▃▄▅▆▇█▇▆",
-        "▁▁▂▃▄▅▆▇█▇",
-        "▁▁▁▂▃▄▅▆▇█",
-        "▁▁▁▁▂▃▄▅▆▇",
-        "▁▁▁▁▁▂▃▄▅▆",
-        "▁▁▁▁▁▁▂▃▄▅",
-        "▁▁▁▁▁▁▁▂▃▄",
-        "▁▁▁▁▁▁▁▁▂▃",
-        "▁▁▁▁▁▁▁▁▁▂"
-    };
-    
-    int i, j;
-    
-    for (i = 0; i < cycles; i++) {
-        for (j = 0; j < 23; j++) {
-            printf("\r" BOLD CYAN "Analyzing %s" RESET, wave[j]);
-            fflush(stdout);
-            usleep(100000);
-        }
-    }
-    printf("\r" GREEN "✓ Analysis complete!    \n" RESET);
-}
 
 t_time *parse_today_logtime() {
 	FILE *today = fopen("sameDay", "r");
@@ -301,10 +244,6 @@ char *today_status(t_time *todays_time, int daily_goal, int month_progress) {
 	return (output);
 }
 
-/*void progress_bar(int day_progress, int month progress) {*/
-/**/
-/*}*/
-
 // print print data
 void	print_data() {
 	t_time *accumulated_logtime = read_time_from_file("accumulated_logtime");
@@ -330,7 +269,13 @@ void	print_data() {
 	printf("  │                     │   │                     │   │                     │"RESET"\n");
 	printf("%s", today_status(accumulated_for_today, daily_goal, monthly_percen));
 	printf(YELLOW"  │                     │   │                     │   │                     │\n");
-	printf("  ╰─────────────────────╯   ╰─────────────────────╯   ╰─────────────────────╯"RESET);
+	printf("  ╰─────────────────────╯   ╰─────────────────────╯   ╰─────────────────────╯"RESET"\n");
+	printf("\n\t"ORANGE BOLD"︻デ═一"BLRED"・・・・・・・・・・・・・・・・・・・・・・・・・・・・・\n\n"RESET);
+	progress_bar("DAY PROGRESS", 50, 10, daily_percent);
+	printf(BLRED "\t\n ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° ° °\n\n"RESET);
+	progress_bar("MONTH PROGRESS", 50, 10, monthly_percen);
+	printf("\n");
+	
 }
 
 // Main demo function
