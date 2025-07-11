@@ -30,6 +30,7 @@ install() {
 	cc add_logtime.c logtime_utils.c str_split.c -o addLogtime
 	cc  logtime_print.c logtime_utils.c str_split.c -o logtimePrint 
 	init_logtime
+	mkdir ~/.config/autostart
 	cat > ~/.config/autostart/logtime.desktop <<EOF
 [Desktop Entry]
 Type=Application
