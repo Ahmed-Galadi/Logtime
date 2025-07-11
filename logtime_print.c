@@ -208,9 +208,9 @@ char *month_status_emoji(int month_progress) {
 	else if (month_progress > 25 && month_progress <= 50)
 		sprintf(output, CYAN BOLD"    MEDIUM"RESET GREENYELLOW" (•̀ᴗ•́ )و   "RESET);
 	else if (month_progress > 50 && month_progress <= 75)
-		sprintf(output, BABYBLUE BOLD"  ALMOST "RESET GREEN"ᕙ( •̀ ᗜ •́ )ᕗ "RESET);
+		sprintf(output, BABYBLUE BOLD"  ALMOST "RESET GREEN"ᕙ( •̀ ᗜ •́)ᕗ  "RESET);
 	else if (month_progress > 75 && month_progress <= 99)
-		sprintf(output,LAVENDER BOLD" SO CLOSE "RED" ৻(•̀ ᗜ •́ ৻) "RESET);
+		sprintf(output,LAVENDER BOLD" SO CLOSE "RED"৻(•̀ ᗜ •́৻)  "RESET);
 	else if (month_progress >= 100)
 		sprintf(output,YELLOW BOLD" CONGRATS!"RESET ORANGE"ヾ(˃ᴗ˂)◞"RESET LAVENDER"•"RESET BABYBLUE"*"HOTPINK"✰"RESET);
 	return (output);
